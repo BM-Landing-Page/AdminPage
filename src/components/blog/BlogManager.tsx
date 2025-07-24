@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
-import { Plus, Edit2, Trash2, Star } from 'lucide-react';
+import { Plus, Edit2, Trash2, Star, ImageIcon } from 'lucide-react';
 
 interface BlogPost {
   id: string;
@@ -9,7 +9,7 @@ interface BlogPost {
   content: string;
   author: string;
   feature: boolean;
-  thumbnail_url?: string;
+  thumbnail?: string; // Changed from thumbnail_url to thumbnail
   created_at: string;
 }
 
@@ -26,6 +26,7 @@ const BlogManager: React.FC = () => {
     feature: false,
     thumbnail: null as File | null,
   });
+  const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetchPosts();
@@ -34,6 +35,7 @@ const BlogManager: React.FC = () => {
   const fetchPosts = async () => {
     try {
       const data = await api.blog.getAll();
+      console.log('Fetched blog posts:', data); // Debug log
       setPosts(data);
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -53,6 +55,7 @@ const BlogManager: React.FC = () => {
     data.append('feature', formData.feature.toString());
     if (formData.thumbnail) {
       data.append('thumbnail', formData.thumbnail);
+      console.log('Uploading thumbnail:', formData.thumbnail.name); // Debug log
     }
 
     try {
@@ -101,6 +104,44 @@ const BlogManager: React.FC = () => {
       thumbnail: null,
     });
     setShowForm(true);
+  };
+
+  const handleImageError = (postId: string, imageUrl: string) => {
+    console.error(`Failed to load image for post ${postId}:`, imageUrl); // Debug log
+    setImageLoadErrors(prev => new Set(prev).add(postId));
+  };
+
+  const getImageUrl = (post: BlogPost) => {
+    if (!post.thumbnail) { // Changed from thumbnail_url to thumbnail
+      console.log(`No thumbnail for post ${post.id}`); // Debug log
+      return null;
+    }
+    
+    console.log(`Original thumbnail for post ${post.id}:`, post.thumbnail); // Debug log
+    
+    // Handle different possible URL formats
+    let finalUrl: string;
+    
+    if (post.thumbnail.startsWith('http')) {
+      finalUrl = post.thumbnail;
+    } else if (post.thumbnail.startsWith('/')) {
+      finalUrl = post.thumbnail;
+    } else {
+      // Try different base URL combinations - adjust these based on your API setup
+      const possibleUrls = [
+        `${window.location.origin}/${post.thumbnail}`,
+        `${window.location.origin}/uploads/${post.thumbnail}`,
+        `${window.location.origin}/api/uploads/${post.thumbnail}`,
+        `/uploads/${post.thumbnail}`,
+        `/${post.thumbnail}`
+      ];
+      
+      finalUrl = possibleUrls[0]; // Default to first option
+      console.log('Possible image URLs to try:', possibleUrls); // Debug log
+    }
+    
+    console.log(`Final image URL for post ${post.id}:`, finalUrl); // Debug log
+    return finalUrl;
   };
 
   if (loading) {
@@ -196,45 +237,95 @@ const BlogManager: React.FC = () => {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {posts.map((post) => (
-          <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-            {post.thumbnail_url && (
-              <img
-                src={post.thumbnail_url}
-                alt={post.title}
-                className="w-full h-48 object-cover"
-              />
-            )}
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
-                  <span>{post.title}</span>
-                  {post.feature && <Star className="w-4 h-4 text-yellow-500 fill-current" />}
-                </h3>
-                <div className="flex space-x-2">
+        {posts.map((post) => {
+          const imageUrl = getImageUrl(post);
+          const hasImageError = imageLoadErrors.has(post.id);
+          
+          return (
+            <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200">
+              {/* Debug Info - Remove this in production */}
+              
+              
+              {/* Image Section */}
+              <div className="relative h-48 bg-gray-100">
+                {imageUrl && !hasImageError ? (
+                  <img
+                    src={imageUrl}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                    onError={() => handleImageError(post.id, imageUrl)}
+                    onLoad={() => console.log(`Image loaded successfully for post ${post.id}`)}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="text-center">
+                      <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                      <p className="text-xs text-gray-500">
+                        {hasImageError ? 'Failed to load image' : 'No image available'}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Featured Badge */}
+                {post.feature && (
+                  <div className="absolute top-3 left-3 bg-yellow-500 text-white px-2 py-1 rounded-full flex items-center space-x-1 text-xs font-medium">
+                    <Star className="w-3 h-3 fill-current" />
+                    <span>Featured</span>
+                  </div>
+                )}
+                
+                {/* Action Buttons */}
+                <div className="absolute top-3 right-3 flex space-x-2">
                   <button
                     onClick={() => startEdit(post)}
-                    className="text-blue-500 hover:text-blue-700"
+                    className="bg-white bg-opacity-90 hover:bg-opacity-100 text-blue-500 p-2 rounded-full shadow-sm transition-all duration-200"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(post.id)}
-                    className="text-red-500 hover:text-red-700"
+                    className="bg-white bg-opacity-90 hover:bg-opacity-100 text-red-500 p-2 rounded-full shadow-sm transition-all duration-200"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-2">By {post.author}</p>
-              <p className="text-gray-700 line-clamp-3">{post.content}</p>
-              <p className="text-gray-500 text-xs mt-3">
-                {new Date(post.created_at).toLocaleDateString()}
-              </p>
+              
+              {/* Content Section */}
+              <div className="p-6">
+                <div className="mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 mb-1">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm">By {post.author}</p>
+                </div>
+                
+                <p className="text-gray-700 text-sm line-clamp-3 mb-4">
+                  {post.content}
+                </p>
+                
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                  {imageUrl && !hasImageError && (
+                    <span className="flex items-center space-x-1">
+                      <ImageIcon className="w-3 h-3" />
+                      <span>Has Image</span>
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
+
+      {posts.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-500">No blog posts found</p>
+        </div>
+      )}
     </div>
   );
 };

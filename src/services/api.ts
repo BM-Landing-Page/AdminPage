@@ -26,6 +26,38 @@ export const api = {
         headers: getAuthHeaders(token),
       }),
   },
+    // Career API
+  career: {
+    getAll: (token: string) =>
+      fetch(`${BASE_URL}/career`, {
+        headers: getAuthHeaders(token),
+      }).then(res => res.json()),
+
+    create: (data: any) =>
+      fetch(`${BASE_URL}/career`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }),
+
+    update: (id: string, data: any, token: string) =>
+      fetch(`${BASE_URL}/career/${id}`, {
+        method: 'PUT',
+        headers: {
+          ...getAuthHeaders(token),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }),
+
+    delete: (id: string, token: string) =>
+      fetch(`${BASE_URL}/career/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(token),
+      }),
+  },
 
   // Team API
   team: {

@@ -6,6 +6,7 @@ import TeamManager from '../components/team/TeamManager';
 import ApplicationManager from '../components/applications/ApplicationManager';
 import CalendarManager from '../components/calendar/CalendarManager';
 import GalleryManager from '../components/gallery/GalleryManager';
+import CareerManager from '../components/career/CareerManager';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('blog');
@@ -20,6 +21,8 @@ const Dashboard: React.FC = () => {
         return <ApplicationManager />;
       case 'calendar':
         return <CalendarManager />;
+      case 'career':
+        return <CareerManager />;
       case 'gallery':
         return <GalleryManager />;
       default:
