@@ -151,7 +151,7 @@ const TeamManager: React.FC = () => {
       education_background: member.education_background,
       joined_month: member.joined_month,
       joined_year: member.joined_year,
-      linkedin_url: member.linkedin_url,
+      linkedin_url: member.linkedin_url || '',
       department: member.department || '',
       priority: member.priority || 0,
       image: null,
@@ -356,7 +356,7 @@ const TeamManager: React.FC = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                LinkedIn Profile URL *
+                LinkedIn Profile URL (Optional)
               </label>
               <input
                 type="url"
@@ -364,8 +364,8 @@ const TeamManager: React.FC = () => {
                 value={formData.linkedin_url}
                 onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
               />
+              <p className="text-xs text-gray-500 mt-1">Leave empty if the member doesn't have a LinkedIn profile</p>
             </div>
             
             <div>
@@ -510,15 +510,17 @@ const TeamManager: React.FC = () => {
                 </div>
               )}
               
-              <a
-                href={member.linkedin_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 text-blue-500 hover:text-blue-700 text-sm"
-              >
-                <Linkedin className="w-4 h-4" />
-                <span>LinkedIn</span>
-              </a>
+              {member.linkedin_url && (
+                <a
+                  href={member.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-1 text-blue-500 hover:text-blue-700 text-sm"
+                >
+                  <Linkedin className="w-4 h-4" />
+                  <span>LinkedIn</span>
+                </a>
+              )}
             </div>
           </div>
         ))}
