@@ -8,6 +8,7 @@ interface BlogPost {
   title: string;
   content: string;
   author: string;
+  grade: number;
   feature: boolean;
   thumbnail?: string; // Changed from thumbnail_url to thumbnail
   created_at: string;
@@ -25,6 +26,7 @@ const BlogManager: React.FC = () => {
     author: '',
     feature: false,
     thumbnail: null as File | null,
+    grade: 0,
   });
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set());
 
@@ -51,6 +53,7 @@ const BlogManager: React.FC = () => {
     const data = new FormData();
     data.append('title', formData.title);
     data.append('content', formData.content);
+    data.append('grade', formData.grade.toString());
     data.append('author', formData.author);
     data.append('feature', formData.feature.toString());
     if (formData.thumbnail) {
@@ -87,6 +90,7 @@ const BlogManager: React.FC = () => {
       title: '',
       content: '',
       author: '',
+      grade: 0,
       feature: false,
       thumbnail: null,
     });
@@ -102,6 +106,7 @@ const BlogManager: React.FC = () => {
       author: post.author,
       feature: post.feature,
       thumbnail: null,
+      grade: post.grade,
     });
     setShowForm(true);
   };
@@ -199,13 +204,24 @@ const BlogManager: React.FC = () => {
               required
             />
             
-            <div className="flex items-center space-x-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setFormData({ ...formData, thumbnail: e.target.files?.[0] || null })}
                 className="px-4 py-2 border border-gray-300 rounded-lg"
               />
+              <input
+                type="number"
+                placeholder="Grade"
+                value={formData.grade}
+                onChange={(e) => setFormData({ ...formData, grade: parseInt(e.target.value) || 0 })}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+            
+            <div className="flex items-center space-x-4">
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
@@ -299,7 +315,7 @@ const BlogManager: React.FC = () => {
                   <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 mb-1">
                     {post.title}
                   </h3>
-                  <p className="text-gray-600 text-sm">By {post.author}</p>
+                  <p className="text-gray-600 text-sm">By {post.author} • Grade {post.grade}</p>
                 </div>
                 
                 <p className="text-gray-700 text-sm line-clamp-3 mb-4">
