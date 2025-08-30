@@ -86,7 +86,7 @@ export const api = {
           ...getAuthHeaders(token),
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description: achievementText }), // Changed from achievement_text
+        body: JSON.stringify({ description: achievementText }),
       }),
     deleteAchievement: (achievementId: string, token: string) =>
       fetch(`${BASE_URL}/team/achievements/${achievementId}`, {
@@ -173,6 +173,68 @@ export const api = {
       }),
     delete: (id: string, token: string) =>
       fetch(`${BASE_URL}/data/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(token),
+      }),
+  },
+
+  // Feedback API
+
+  // Feedback API
+  feedback: {
+    // Public - Get all feedback
+    getAll: () => fetch(`${BASE_URL}/feedback`).then(res => res.json()),
+
+    // Public - Send feedback via email (no database storage)
+    sendEmail: (data: {
+      parent_name: string;
+      student_name: string;
+      grade: number;
+      desc: string;
+    }) =>
+      fetch(`${BASE_URL}/feedback/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }),
+
+    // Protected - Create feedback in database
+    create: (data: {
+      parent_name: string;
+      student_name: string;
+      grade: number;
+      desc: string;
+    }, token: string) =>
+      fetch(`${BASE_URL}/feedback`, {
+        method: 'POST',
+        headers: {
+          ...getAuthHeaders(token),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }),
+
+    // Protected - Update feedback
+    update: (id: string, data: {
+      parent_name: string;
+      student_name: string;
+      grade: number;
+      desc: string;
+    }, token: string) =>
+      fetch(`${BASE_URL}/feedback/${id}`, {
+        method: 'PUT',
+        headers: {
+          ...getAuthHeaders(token),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }),
+
+    // Protected - Delete feedback
+    delete: (id: string, token: string) =>
+      fetch(`${BASE_URL}/feedback/${id}`, {
         method: 'DELETE',
         headers: getAuthHeaders(token),
       }),

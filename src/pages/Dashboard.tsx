@@ -1,3 +1,4 @@
+// src/pages/dashboard
 import React, { useState } from 'react';
 import Header from '../components/layout/Header';
 import TabNavigation, { TabType } from '../components/layout/TabNavigation';
@@ -7,6 +8,7 @@ import ApplicationManager from '../components/applications/ApplicationManager';
 import CalendarManager from '../components/calendar/CalendarManager';
 import GalleryManager from '../components/gallery/GalleryManager';
 import CareerManager from '../components/career/CareerManager';
+import FeedbackManager from '../components/feedback/FeedbackManager';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('blog');
@@ -25,6 +27,8 @@ const Dashboard: React.FC = () => {
         return <CareerManager />;
       case 'gallery':
         return <GalleryManager />;
+      case 'feedback':
+        return <FeedbackManager />;
       default:
         return <BlogManager />;
     }

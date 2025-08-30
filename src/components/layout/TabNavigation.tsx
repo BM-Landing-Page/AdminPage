@@ -1,7 +1,7 @@
 import React from 'react';
-import { BookOpen, Users, FileText, Calendar, Image } from 'lucide-react';
+import { BookOpen, Users, FileText, Calendar, Image, MessageSquare } from 'lucide-react';
 
-export type TabType = 'blog' | 'team' | 'applications' | 'calendar' | 'gallery' | 'career';
+export type TabType = 'blog' | 'team' | 'applications' | 'calendar' | 'gallery' | 'career' | 'feedback';
 
 interface TabNavigationProps {
   activeTab: TabType;
@@ -15,6 +15,7 @@ const tabs = [
   { id: 'calendar' as TabType, name: 'Calendar', icon: Calendar },
   { id: 'career' as TabType, name: 'Career', icon: Users }, 
   { id: 'gallery' as TabType, name: 'Gallery', icon: Image },
+  { id: 'feedback' as TabType, name: 'Feedback', icon: MessageSquare },
 ];
 
 const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange }) => {
