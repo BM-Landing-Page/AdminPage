@@ -9,9 +9,12 @@ import CalendarManager from '../components/calendar/CalendarManager';
 import GalleryManager from '../components/gallery/GalleryManager';
 import CareerManager from '../components/career/CareerManager';
 import FeedbackManager from '../components/feedback/FeedbackManager';
-import PopupManager from '../components/popup/PopupManager';
-import ScrollManager from '../components/scroll/ScrollManager';
-import AchievementsManager from '../components/achievements/AchievementsManager';
+import PopupManager from '../components/popup/popupManager';
+import ScrollManager from '../components/scroll/scrollManager';
+import AchievementManager from '../components/achievements/achievementsManager';
+
+declare const AchievementManager: React.FC;
+
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('blog');
 
@@ -36,7 +39,7 @@ const Dashboard: React.FC = () => {
       case 'scroll':
         return <ScrollManager />;
       case 'achievements':
-        return <AchievementsManager />;
+        return <AchievementManager />;
       default:
         return <BlogManager />;
     }

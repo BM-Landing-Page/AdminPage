@@ -3,12 +3,23 @@ import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import { Plus, Edit2, Trash2, Award } from 'lucide-react';
 
-const AchievementManager = () => {
+// Type for an achievement item
+interface Achievement {
+  id: string;
+  name: string;
+  grade?: string;
+  tagline?: string;
+  title: string;
+  desc: string;
+  created_at: string;
+}
+
+const AchievementManager: React.FC = () => {
   const { token } = useAuth();
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editingItem, setEditingItem] = useState(null);
+  const [editingItem, setEditingItem] = useState<Achievement | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     grade: '',
@@ -23,7 +34,7 @@ const AchievementManager = () => {
 
   const fetchItems = async () => {
     try {
-      const data = await api.achievements.getAll();
+      const data: Achievement[] = await api.achievements.getAll();
       setItems(data);
     } catch (error) {
       console.error('Error fetching achievements:', error);
@@ -32,7 +43,7 @@ const AchievementManager = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
 
@@ -49,7 +60,7 @@ const AchievementManager = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     if (!token || !confirm('Are you sure you want to delete this achievement?')) return;
 
     try {
@@ -72,7 +83,7 @@ const AchievementManager = () => {
     setEditingItem(null);
   };
 
-  const startEdit = (item) => {
+  const startEdit = (item: Achievement) => {
     setEditingItem(item);
     setFormData({
       name: item.name,
