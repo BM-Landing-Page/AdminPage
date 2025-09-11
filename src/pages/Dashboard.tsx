@@ -9,6 +9,7 @@ import CalendarManager from '../components/calendar/CalendarManager';
 import GalleryManager from '../components/gallery/GalleryManager';
 import CareerManager from '../components/career/CareerManager';
 import FeedbackManager from '../components/feedback/FeedbackManager';
+import PopupManager from '../components/popup/PopupManager';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('blog');
@@ -29,6 +30,8 @@ const Dashboard: React.FC = () => {
         return <GalleryManager />;
       case 'feedback':
         return <FeedbackManager />;
+      case 'popup':
+        return <PopupManager />;
       default:
         return <BlogManager />;
     }

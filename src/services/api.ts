@@ -26,7 +26,8 @@ export const api = {
         headers: getAuthHeaders(token),
       }),
   },
-    // Career API
+
+  // Career API
   career: {
     getAll: (token: string) =>
       fetch(`${BASE_URL}/career`, {
@@ -179,8 +180,6 @@ export const api = {
   },
 
   // Feedback API
-
-  // Feedback API
   feedback: {
     // Public - Get all feedback
     getAll: () => fetch(`${BASE_URL}/feedback`).then(res => res.json()),
@@ -239,4 +238,69 @@ export const api = {
         headers: getAuthHeaders(token),
       }),
   },
+
+  // Popup API - NEW
+  // api.ts
+
+popup: {
+  // Public - Get current popup
+  get: async () => {
+    const res = await fetch(`${BASE_URL}/popup`);
+    if (!res.ok) throw new Error(`Failed to fetch popup: ${res.status}`);
+    return res.json();
+  },
+
+  // Protected - Create popup (replaces existing)
+  create: async (data: FormData, token: string) => {
+    const res = await fetch(`${BASE_URL}/popup`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`, // 👈 don't set Content-Type manually for FormData
+      },
+      body: data,
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text(); // Try to read backend error
+      throw new Error(`Failed to create popup: ${res.status} - ${errorText}`);
+    }
+
+    return res.json();
+  },
+
+  // Protected - Update popup
+  update: async (data: FormData, token: string) => {
+    const res = await fetch(`${BASE_URL}/popup`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: data,
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to update popup: ${res.status} - ${errorText}`);
+    }
+
+    return res.json();
+  },
+
+  // Protected - Delete popup
+  delete: async (token: string) => {
+    const res = await fetch(`${BASE_URL}/popup`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to delete popup: ${res.status} - ${errorText}`);
+    }
+
+    return res.json().catch(() => ({})); // if server returns empty response
+  },
+},
 };
