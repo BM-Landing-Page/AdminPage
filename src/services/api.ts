@@ -303,4 +303,138 @@ popup: {
     return res.json().catch(() => ({})); // if server returns empty response
   },
 },
+  // Scroll API - NEW
+  // Scroll API - NEW
+scroll: {
+  // Public - Get all scroll items
+  getAll: async () => {
+    const res = await fetch(`${BASE_URL}/scroll`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch scrolls: ${res.status}`);
+    }
+    return res.json();
+  },
+
+  // Protected - Create scroll
+  create: async (data: object, token: string) => {
+    const res = await fetch(`${BASE_URL}/scroll`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to create scroll: ${res.status} - ${errorText}`);
+    }
+
+    return res.json();
+  },
+
+  // Protected - Update scroll
+  update: async (id: string, data: object, token: string) => {
+    const res = await fetch(`${BASE_URL}/scroll/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to update scroll: ${res.status} - ${errorText}`);
+    }
+
+    return res.json();
+  },
+
+  // Protected - Delete scroll
+  delete: async (id: string, token: string) => {
+    const res = await fetch(`${BASE_URL}/scroll/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to delete scroll: ${res.status} - ${errorText}`);
+    }
+
+    return res.json().catch(() => ({})); // fallback if server sends empty response
+  },
+},
+// Achievements API - NEW
+achievements: {
+  // Public - Get all achievements
+  getAll: async () => {
+    const res = await fetch(`${BASE_URL}/achievements`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch achievements: ${res.status}`);
+    }
+    return res.json();
+  },
+
+  // Protected - Create achievement
+  create: async (data: object, token: string) => {
+    const res = await fetch(`${BASE_URL}/achievements`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to create achievement: ${res.status} - ${errorText}`);
+    }
+
+    return res.json();
+  },
+
+  // Protected - Update achievement
+  update: async (id: string, data: object, token: string) => {
+    const res = await fetch(`${BASE_URL}/achievements/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to update achievement: ${res.status} - ${errorText}`);
+    }
+
+    return res.json();
+  },
+
+  // Protected - Delete achievement
+  delete: async (id: string, token: string) => {
+    const res = await fetch(`${BASE_URL}/achievements/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to delete achievement: ${res.status} - ${errorText}`);
+    }
+
+    return res.json().catch(() => ({})); // fallback if server sends empty response
+  },
+},
+
 };

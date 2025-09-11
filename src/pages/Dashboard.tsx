@@ -10,7 +10,8 @@ import GalleryManager from '../components/gallery/GalleryManager';
 import CareerManager from '../components/career/CareerManager';
 import FeedbackManager from '../components/feedback/FeedbackManager';
 import PopupManager from '../components/popup/PopupManager';
-
+import ScrollManager from '../components/scroll/ScrollManager';
+import AchievementsManager from '../components/achievements/AchievementsManager';
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('blog');
 
@@ -32,6 +33,10 @@ const Dashboard: React.FC = () => {
         return <FeedbackManager />;
       case 'popup':
         return <PopupManager />;
+      case 'scroll':
+        return <ScrollManager />;
+      case 'achievements':
+        return <AchievementsManager />;
       default:
         return <BlogManager />;
     }
