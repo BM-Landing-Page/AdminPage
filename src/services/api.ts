@@ -1,3 +1,4 @@
+// Place BASE_URL and getAuthHeaders at the top
 const BASE_URL = 'https://backend-edhc.onrender.com';
 
 export const getAuthHeaders = (token: string) => ({
@@ -5,6 +6,137 @@ export const getAuthHeaders = (token: string) => ({
 });
 
 export const api = {
+  // Alumni API
+  alumni: {
+    getAll: async () => {
+      const res = await fetch(`${BASE_URL}/alumni`);
+      if (!res.ok) throw new Error(`Failed to fetch alumni: ${res.status}`);
+      return res.json();
+    },
+    create: async (data: FormData, token: string) => {
+      const res = await fetch(`${BASE_URL}/alumni`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
+      });
+      if (!res.ok) throw new Error(`Failed to create alumnus: ${res.status}`);
+      return res.json();
+    },
+    update: async (id: string, data: FormData, token: string) => {
+      const res = await fetch(`${BASE_URL}/alumni/${id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
+      });
+      if (!res.ok) throw new Error(`Failed to update alumnus: ${res.status}`);
+      return res.json();
+    },
+    delete: async (id: string, token: string) => {
+      const res = await fetch(`${BASE_URL}/alumni/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`Failed to delete alumnus: ${res.status}`);
+      return res.json();
+    },
+  },
+
+  // Batches API
+  batches: {
+    getAll: async () => {
+      const res = await fetch(`${BASE_URL}/batches`);
+      if (!res.ok) throw new Error(`Failed to fetch batches: ${res.status}`);
+      return res.json();
+    },
+    create: async (data: { batch_year: number; description: string }, token: string) => {
+      const res = await fetch(`${BASE_URL}/batches`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`Failed to create batch: ${res.status}`);
+      return res.json();
+    },
+    update: async (id: string, data: { batch_year: number; description: string }, token: string) => {
+      const res = await fetch(`${BASE_URL}/batches/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`Failed to update batch: ${res.status}`);
+      return res.json();
+    },
+    delete: async (id: string, token: string) => {
+      const res = await fetch(`${BASE_URL}/batches/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`Failed to delete batch: ${res.status}`);
+      return res.json();
+    },
+  },
+
+  // Universities API
+  universities: {
+    getAll: async () => {
+      const res = await fetch(`${BASE_URL}/universities`);
+      if (!res.ok) throw new Error(`Failed to fetch universities: ${res.status}`);
+      return res.json();
+    },
+    create: async (data: FormData, token: string) => {
+      const res = await fetch(`${BASE_URL}/universities`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
+      });
+      if (!res.ok) throw new Error(`Failed to create university: ${res.status}`);
+      return res.json();
+    },
+    update: async (id: string, data: FormData, token: string) => {
+      const res = await fetch(`${BASE_URL}/universities/${id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
+      });
+      if (!res.ok) throw new Error(`Failed to update university: ${res.status}`);
+      return res.json();
+    },
+    delete: async (id: string, token: string) => {
+      const res = await fetch(`${BASE_URL}/universities/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`Failed to delete university: ${res.status}`);
+      return res.json();
+    },
+    getOfferCounts: async () => {
+      const res = await fetch(`${BASE_URL}/universities/offer-counts`);
+      if (!res.ok) throw new Error(`Failed to fetch offer counts: ${res.status}`);
+      return res.json();
+    },
+  },
+
+  // ...existing code...
   // Blog API
   blog: {
     getAll: () => fetch(`${BASE_URL}/blog`).then(res => res.json()),
@@ -437,4 +569,99 @@ achievements: {
   },
 },
 
+  // Bus Routes API
+  busRoutes: {
+    getAll: async () => {
+      const res = await fetch(`${BASE_URL}/bus-routes`);
+      if (!res.ok) throw new Error(`Failed to fetch bus routes: ${res.status}`);
+      return res.json();
+    },
+    getById: async (id: string | number) => {
+      const res = await fetch(`${BASE_URL}/bus-routes/${id}`);
+      if (!res.ok) throw new Error(`Failed to fetch bus route: ${res.status}`);
+      return res.json();
+    },
+    create: async (data: { route_name: string; bus_number: string; active?: boolean }, token: string) => {
+      const res = await fetch(`${BASE_URL}/bus-routes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`Failed to create bus route: ${res.status}`);
+      return res.json();
+    },
+    update: async (id: string | number, data: { route_name?: string; bus_number?: string; active?: boolean }, token: string) => {
+      const res = await fetch(`${BASE_URL}/bus-routes/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`Failed to update bus route: ${res.status}`);
+      return res.json();
+    },
+    delete: async (id: string | number, token: string) => {
+      const res = await fetch(`${BASE_URL}/bus-routes/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`Failed to delete bus route: ${res.status}`);
+      return res.json();
+    },
+  },
+
+  // Bus Stops API
+  busStops: {
+    getAll: async () => {
+      const res = await fetch(`${BASE_URL}/bus-stops`);
+      if (!res.ok) throw new Error(`Failed to fetch bus stops: ${res.status}`);
+      return res.json();
+    },
+    getByRoute: async (routeId: string | number) => {
+      const res = await fetch(`${BASE_URL}/bus-stops/route/${routeId}`);
+      if (!res.ok) throw new Error(`Failed to fetch bus stops for route: ${res.status}`);
+      return res.json();
+    },
+    create: async (data: { name: string; pickup?: string; drop?: string; order?: number; route: string | number }, token: string) => {
+      const res = await fetch(`${BASE_URL}/bus-stops`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`Failed to create bus stop: ${res.status}`);
+      return res.json();
+    },
+    update: async (id: string | number, data: { name?: string; pickup?: string; drop?: string; order?: number; route?: string | number }, token: string) => {
+      const res = await fetch(`${BASE_URL}/bus-stops/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`Failed to update bus stop: ${res.status}`);
+      return res.json();
+    },
+    delete: async (id: string | number, token: string) => {
+      const res = await fetch(`${BASE_URL}/bus-stops/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`Failed to delete bus stop: ${res.status}`);
+      return res.json();
+    },
+  },
 };

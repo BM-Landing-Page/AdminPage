@@ -12,8 +12,10 @@ import FeedbackManager from '../components/feedback/FeedbackManager';
 import PopupManager from '../components/popup/popupManager';
 import ScrollManager from '../components/scroll/scrollManager';
 import AchievementManager from '../components/achievements/achievementsManager';
-
-declare const AchievementManager: React.FC;
+import BusRoutesManager from '../components/busRoutes/BusRoutesManager';
+import AlumniManager from '../components/alumni/AlumniManager';
+import UniversitiesManager from '../components/universities/UniversitiesManager';
+import BatchManager from '../components/batches/BatchManager';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('blog');
@@ -40,6 +42,14 @@ const Dashboard: React.FC = () => {
         return <ScrollManager />;
       case 'achievements':
         return <AchievementManager />;
+      case 'busRoutes':
+        return <BusRoutesManager />;
+      case 'alumni':
+        return <AlumniManager />;
+      case 'universities':
+        return <UniversitiesManager />;
+      case 'batches':
+        return <BatchManager />;
       default:
         return <BlogManager />;
     }

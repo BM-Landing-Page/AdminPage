@@ -2,7 +2,7 @@ import React from 'react';
 import { BookOpen, Users, FileText, Calendar, Image, MessageSquare } from 'lucide-react';
 
 export type TabType = 'blog' | 'team' | 'applications' | 'calendar' | 'gallery' | 'career' | 'feedback' | 'popup' 
-  | 'scroll' | 'achievements';
+  | 'scroll' | 'achievements' | 'busRoutes' | 'alumni' | 'universities' | 'batches';
 
 interface TabNavigationProps {
   activeTab: TabType;
@@ -10,6 +10,10 @@ interface TabNavigationProps {
 }
 
 const tabs = [
+  { id: 'busRoutes' as TabType, name: 'Bus Routes', icon: Users },
+  { id: 'alumni' as TabType, name: 'Alumni', icon: Users },
+  { id: 'universities' as TabType, name: 'Universities', icon: Image },
+  { id: 'batches' as TabType, name: 'Batches', icon: FileText },
   { id: 'blog' as TabType, name: 'Blog', icon: BookOpen },
   { id: 'team' as TabType, name: 'Team', icon: Users },
   { id: 'applications' as TabType, name: 'Applications', icon: FileText },
@@ -24,20 +28,20 @@ const tabs = [
 
 const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange }) => {
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-white shadow-lg border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         {/* Desktop View - Hidden on mobile */}
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex items-center justify-center gap-2 py-2">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-200 shadow-sm border-2 ${
                   activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'bg-blue-600 text-white border-blue-600 scale-105'
+                    : 'bg-gray-50 text-gray-600 border-transparent hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -49,17 +53,17 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
 
         {/* Mobile View - Horizontal Scrollable */}
         <div className="md:hidden">
-          <div className="flex overflow-x-auto scrollbar-hide space-x-1 py-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <div className="flex overflow-x-auto scrollbar-hide gap-2 py-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => onTabChange(tab.id)}
-                  className={`flex-shrink-0 flex flex-col items-center space-y-1 py-3 px-4 rounded-lg font-medium text-xs transition-colors duration-200 min-w-[80px] ${
+                  className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-full font-semibold text-xs transition-all duration-200 min-w-[80px] shadow-sm border-2 ${
                     activeTab === tab.id
-                      ? 'bg-blue-50 text-blue-600 border border-blue-200'
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                      ? 'bg-blue-600 text-white border-blue-600 scale-105'
+                      : 'bg-gray-50 text-gray-600 border-transparent hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
