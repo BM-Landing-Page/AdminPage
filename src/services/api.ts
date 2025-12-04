@@ -159,38 +159,123 @@ export const api = {
       }),
   },
 
-  // Career API
+
+
+
+  // ---------------- Career API ----------------
   career: {
+    // Public - Create a new career application
+    create: (data: FormData) =>
+      fetch(`${BASE_URL}/career`, {
+        method: 'POST',
+        body: data, // FormData automatically sets Content-Type
+      }).then(res => {
+        if (!res.ok) throw new Error(`Failed to create career: ${res.status}`);
+        return res.json();
+      }),
+
+    // Protected - Get all career applications
     getAll: (token: string) =>
       fetch(`${BASE_URL}/career`, {
         headers: getAuthHeaders(token),
       }).then(res => res.json()),
 
-    create: (data: any) =>
-      fetch(`${BASE_URL}/career`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      }),
+    // Protected - Get single career by ID
+    getById: (id: string, token: string) =>
+      fetch(`${BASE_URL}/career/${id}`, {
+        headers: getAuthHeaders(token),
+      }).then(res => res.json()),
 
-    update: (id: string, data: any, token: string) =>
+    // Protected - Update career application
+    update: (id: string, data: FormData, token: string) =>
       fetch(`${BASE_URL}/career/${id}`, {
         method: 'PUT',
-        headers: {
-          ...getAuthHeaders(token),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        headers: getAuthHeaders(token),
+        body: data,
+      }).then(res => {
+        if (!res.ok) throw new Error(`Failed to update career: ${res.status}`);
+        return res.json();
       }),
 
+    // Protected - Delete career application
     delete: (id: string, token: string) =>
       fetch(`${BASE_URL}/career/${id}`, {
         method: 'DELETE',
         headers: getAuthHeaders(token),
+      }).then(res => {
+        if (!res.ok) throw new Error(`Failed to delete career: ${res.status}`);
+        return res.json();
       }),
   },
+
+  // ---------------- Positions API ----------------
+  positions: {
+    // Public - Get all positions (for dropdown)
+    getAll: () =>
+      fetch(`${BASE_URL}/positions`).then(res => res.json()),
+
+    // Protected - Create a new position
+    create: (data: { name: string; description: string }, token: string) =>
+      fetch(`${BASE_URL}/positions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(token),
+        },
+        body: JSON.stringify(data),
+      }).then(res => res.json()),
+
+    // Protected - Update a position
+    update: (id: string, data: { name?: string; description?: string }, token: string) =>
+      fetch(`${BASE_URL}/positions/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(token),
+        },
+        body: JSON.stringify(data),
+      }).then(res => res.json()),
+
+    // Protected - Delete a position
+    delete: (id: string, token: string) =>
+      fetch(`${BASE_URL}/positions/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(token),
+      }).then(res => res.json()),
+  },
+
+  // // Career API
+  // career: {
+  //   getAll: (token: string) =>
+  //     fetch(`${BASE_URL}/career`, {
+  //       headers: getAuthHeaders(token),
+  //     }).then(res => res.json()),
+
+  //   create: (data: any) =>
+  //     fetch(`${BASE_URL}/career`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(data),
+  //     }),
+
+  //   update: (id: string, data: any, token: string) =>
+  //     fetch(`${BASE_URL}/career/${id}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         ...getAuthHeaders(token),
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(data),
+  //     }),
+
+  //   delete: (id: string, token: string) =>
+  //     fetch(`${BASE_URL}/career/${id}`, {
+  //       method: 'DELETE',
+  //       headers: getAuthHeaders(token),
+  //     }),
+  // },
 
   // Team API
   team: {

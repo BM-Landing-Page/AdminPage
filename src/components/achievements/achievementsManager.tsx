@@ -12,6 +12,7 @@ interface Achievement {
   title: string;
   desc: string;
   created_at: string;
+  
 }
 
 const AchievementManager: React.FC = () => {
