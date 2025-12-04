@@ -14,12 +14,12 @@ interface GalleryItem {
 
 // Predefined categories
 const CATEGORIES = [
-  'KEarly Years',
-  'Sports',
-  'Campus Life',
-  'Events and Celebration',
-  'Beyond Books',
-  'Awards and recogonitions',
+  'Kidsfest',
+  'Sports Synod',
+  'Field Trips / Edu Trips',
+  'Festive Celebrations (Diwali, Christmas, Pongal, etc.)',
+  'Club Activities / House Events',
+  'Inter-school Competitions',
 ];
 
 const GalleryManager: React.FC = () => {
